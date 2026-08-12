@@ -1,0 +1,130 @@
+[
+  {
+    "id": "1723456789012",
+    "title": "JavaScript Functions",
+    "content": "Functions are reusable blocks of code. They can be defined using function declarations, function expressions, or arrow functions.",
+    "category": "Programming",
+    "tags": [
+      "javascript",
+      "coding"
+    ],
+    "pinned": true,
+    "archived": false,
+    "createdAt": "2026-08-11T10:00:00.000Z",
+    "updatedAt": "2026-08-11T10:00:00.000Z",
+    "userId": "1"
+  },
+  {
+    "id": "1723456789013",
+    "title": "Database Normalization",
+    "content": "1NF: Eliminate repeating groups.\n2NF: Eliminate redundant data.\n3NF: Eliminate columns not dependent on key.",
+    "category": "Study",
+    "tags": [
+      "database",
+      "sql"
+    ],
+    "pinned": false,
+    "archived": false,
+    "createdAt": "2026-08-11T10:05:00.000Z",
+    "updatedAt": "2026-08-11T10:05:00.000Z",
+    "userId": "1"
+  },
+  {
+    "id": "1723456789014",
+    "title": "Project Ideas",
+    "content": "1. NoteNest (Notes app)\n2. Task Tracker\n3. Weather Dashboard",
+    "category": "Projects",
+    "tags": [
+      "ideas",
+      "webdev"
+    ],
+    "pinned": false,
+    "archived": false,
+    "createdAt": "2026-08-11T10:10:00.000Z",
+    "updatedAt": "2026-08-11T10:10:00.000Z",
+    "userId": "1"
+  },
+  {
+    "id": "1723456789015",
+    "title": "Operating Systems",
+    "content": "Need to study memory management and process scheduling for the upcoming midterm.",
+    "category": "Study",
+    "tags": [
+      "os",
+      "exam"
+    ],
+    "pinned": false,
+    "archived": true,
+    "createdAt": "2026-08-11T10:15:00.000Z",
+    "updatedAt": "2026-08-11T10:15:00.000Z",
+    "userId": "1"
+  },
+  {
+    "id": "1786444256337",
+    "title": "project",
+    "content": "this is my first node",
+    "category": "Study",
+    "tags": [
+      "exam"
+    ],
+    "pinned": false,
+    "archived": false,
+    "createdAt": "2026-08-11T10:30:56.337Z",
+    "updatedAt": "2026-08-11T10:31:09.676Z",
+    "userId": "1"
+  },
+  {
+    "id": "1786457172492",
+    "userId": "1786457156445",
+    "title": "User A Private Note",
+    "content": "Secret Content",
+    "category": "Personal",
+    "tags": [],
+    "pinned": false,
+    "archived": false,
+    "createdAt": "2026-08-11T14:06:12.492Z",
+    "updatedAt": "2026-08-11T14:06:12.492Z"
+  },
+  {
+    "id": "1786460700141",
+    "userId": "1786459902234",
+    "title": "project",
+    "content": "this is my first project",
+    "category": "Study",
+    "tags": [
+      "exam"
+    ],
+    "pinned": false,
+    "archived": false,
+    "createdAt": "2026-08-11T15:05:00.141Z",
+    "updatedAt": "2026-08-11T15:05:00.141Z"
+  },
+  {
+    "id": "1786537708535",
+    "userId": "1786460655481",
+    "title": "Lab report",
+    "content": "Today i create a lab report about my project",
+    "category": "Projects",
+    "tags": [
+      "exam"
+    ],
+    "pinned": false,
+    "archived": false,
+    "createdAt": "2026-08-12T12:28:28.539Z",
+    "updatedAt": "2026-08-12T12:28:28.539Z"
+  },
+  {
+    "id": "1786537852069",
+    "userId": "1786460655481",
+    "title": "project",
+    "content": "This is my second project",
+    "category": "Study",
+    "tags": [
+      "exam"
+    ],
+    "pinned": false,
+    "archived": false,
+    "createdAt": "2026-08-12T12:30:52.069Z",
+    "updatedAt": "2026-08-12T12:30:52.069Z"
+  }
+]

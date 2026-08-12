@@ -1,75 +1,57 @@
-# NoteNest — Personal Notebook Management System
+# balanced-match
 
-## Project Overview
-NoteNest is a simple, fast, and modern personal notebook application. Built purely with Vanilla JavaScript, Node.js, and Express, it provides a lightweight solution for students and professionals to manage their notes effectively.
+Match balanced string pairs, like `{` and `}` or `<b>` and
+`</b>`. Supports regular expressions as well!
 
-## Problem Statement
-Traditional note-taking apps are often cluttered with unnecessary features, rely heavily on internet connections to cloud databases, and are overly complex to self-host. Students need a fast, local-first solution to organize study materials, programming concepts, and project ideas.
+## Example
 
-## Proposed Solution
-NoteNest provides a straightforward, file-based notebook system. By using local JSON files for storage, it avoids the overhead of a traditional database while delivering a snappy user experience with standard CRUD operations, categorization, pinning, and archiving capabilities.
+Get the first matching pair of braces:
 
-## Features
-- **Dashboard**: Quick overview of note statistics and recent activity.
-- **CRUD Operations**: Create, Read, Update, and Delete notes.
-- **Organization**: Categorize tags, pin important notes, and archive old ones.
-- **Search & Filtering**: Instantly search across titles, content, categories, and tags.
-- **Sorting**: Sort by newest, oldest, recently updated, or alphabetically.
-- **Responsive UI**: Works perfectly on desktop, tablet, and mobile.
-- **Dark Mode**: Built-in light and dark themes saved to local storage.
+```js
+import { balanced } from 'balanced-match'
 
-## Technology Stack
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript
-- **Backend**: Node.js, Express.js
-- **Database**: Local File System (`fs/promises`, JSON)
-- **Tooling**: Nodemon
-
-## Project Structure
-```text
-NoteNest/
-├── data/
-│   ├── notes.json
-│   └── categories.json
-├── public/
-│   ├── index.html
-│   ├── style.css
-│   ├── app.js
-│   └── assets/
-│       ├── logo.svg
-│       └── favicon.svg
-├── server.js
-├── package.json
-└── README.md
+console.log(balanced('{', '}', 'pre{in{nested}}post'))
+console.log(balanced('{', '}', 'pre{first}between{second}post'))
+console.log(
+  balanced(/\s+\{\s+/, /\s+\}\s+/, 'pre  {   in{nest}   }  post'),
+)
 ```
 
-## Installation & How to Run
-1. Clone the repository or extract the project folder.
-2. Open the terminal and navigate to the `NoteNest` folder.
-3. Run the following command to install dependencies:
-   ```bash
-   npm install
-   ```
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
-5. Open your browser and navigate to:
-   ```text
-   http://localhost:3000
-   ```
+The matches are:
 
-## API Endpoints
-- `GET /api/categories` - Fetch all categories
-- `GET /api/notes` - Fetch all notes
-- `GET /api/notes/:id` - Fetch a single note
-- `POST /api/notes` - Create a new note
-- `PUT /api/notes/:id` - Update an existing note
-- `DELETE /api/notes/:id` - Delete a note
-- `GET /api/notes/search/:keyword` - Search notes
-- `PATCH /api/notes/:id/pin` - Toggle note pin status
-- `PATCH /api/notes/:id/archive` - Toggle note archive status
+```bash
+$ node example.js
+{ start: 3, end: 14, pre: 'pre', body: 'in{nested}', post: 'post' }
+{ start: 3,
+  end: 9,
+  pre: 'pre',
+  body: 'first',
+  post: 'between{second}post' }
+{ start: 3, end: 17, pre: 'pre', body: 'in{nest}', post: 'post' }
+```
 
-## Future Improvements
-- Markdown support for note content.
-- Image attachments.
-- Data export/import functionality.
+## API
+
+### const m = balanced(a, b, str)
+
+For the first non-nested matching pair of `a` and `b` in `str`, return an
+object with those keys:
+
+- **start** the index of the first match of `a`
+- **end** the index of the matching `b`
+- **pre** the preamble, `a` and `b` not included
+- **body** the match, `a` and `b` not included
+- **post** the postscript, `a` and `b` not included
+
+If there's no match, `undefined` will be returned.
+
+If the `str` contains more `a` than `b` / there are unmatched pairs, the first match that was closed will be used. For example, `{{a}` will match `['{', 'a', '']` and `{a}}` will match `['', 'a', '}']`.
+
+### const r = balanced.range(a, b, str)
+
+For the first non-nested matching pair of `a` and `b` in `str`, return an
+array with indexes: `[ <a index>, <b index> ]`.
+
+If there's no match, `undefined` will be returned.
+
+If the `str` contains more `a` than `b` / there are unmatched pairs, the first match that was closed will be used. For example, `{{a}` will match `[ 1, 3 ]` and `{a}}` will match `[0, 2]`.
