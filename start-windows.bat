@@ -25,7 +25,7 @@ IF NOT EXIST "node_modules\" (
 )
 
 :: 3. Start the server
-echo [INFO] Starting the local server on port 3000...
+echo [INFO] Starting the local server on port 2004...
 :: We use start /B to run it in the background of this command window
 start /B npm run start >nul 2>&1
 
@@ -35,7 +35,7 @@ timeout /t 3 /nobreak >nul
 
 :: 5. Open the browser
 echo [INFO] Opening NoteNest in your default browser...
-start http://localhost:3000
+start http://localhost:2004
 
 echo.
 echo =========================================

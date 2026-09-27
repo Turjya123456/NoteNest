@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const { initDatabase } = require('./db');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 2004;
 const JWT_SECRET = process.env.JWT_SECRET || 'notenest-super-secret-key-123';
 
 app.use(express.json());

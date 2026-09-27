@@ -52,16 +52,16 @@ sleep 2
 # Step 5: Open browser
 echo -e "${CYAN}[*] Opening NoteNest in your browser...${NC}"
 if command -v xdg-open &> /dev/null; then
-    xdg-open http://localhost:3000
+    xdg-open http://localhost:2004
 elif command -v open &> /dev/null; then
-    open http://localhost:3000
+    open http://localhost:2004
 fi
 
 echo ""
 echo "  ======================================================"
 echo -e "  ${GREEN}✅  NoteNest is running!${NC}"
 echo ""
-echo "  📌 Open in browser : http://localhost:3000"
+echo "  📌 Open in browser : http://localhost:2004"
 echo "  👤 Sign up         : Click 'Create Account'"
 echo "  🔑 Admin login     : admin / admin123"
 echo ""

@@ -60,20 +60,20 @@ start /B node server.js >nul 2>&1
 timeout /t 2 /nobreak >nul
 
 :: ── Step 5: Check server started ok ────────────────────
-curl -s http://localhost:3000 >nul 2>&1
+curl -s http://localhost:2004 >nul 2>&1
 IF %ERRORLEVEL% NEQ 0 (
     timeout /t 2 /nobreak >nul
 )
 
 :: ── Step 6: Open browser ────────────────────────────────
 echo  [*] Opening NoteNest in your browser...
-start http://localhost:3000
+start http://localhost:2004
 
 echo.
 echo  ====================================================
 echo   ✅  NoteNest is running!
 echo.
-echo   📌 Open in browser: http://localhost:3000
+echo   📌 Open in browser: http://localhost:2004
 echo.
 echo   👤 First time? Click "Create Account" to sign up
 echo   🔑 Admin login:  admin / admin123
