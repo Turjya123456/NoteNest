@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteNest - Sign In or Register</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: var(--bg-gradient);
+            background-attachment: fixed;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.6;
+            z-index: 1;
+            animation: orbFloat 10s infinite alternate ease-in-out;
+        }
+        .orb-1 {
+            width: 380px; height: 380px;
+            background: var(--primary-color);
+            top: -100px; left: -100px;
+        }
+        .orb-2 {
+            width: 440px; height: 440px;
+            background: var(--accent-rose);
+            bottom: -150px; right: -150px;
+        }
+        @keyframes orbFloat {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, 40px) scale(1.08); }
+        }
+
+        .login-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--glass-border);
+            padding: 38px 42px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 440px;
+            z-index: 10;
+            position: relative;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .login-logo {
+            width: 54px; height: 54px;
+            background: var(--primary-gradient);
+            border-radius: var(--radius-md);
+            display: inline-flex;
+            align-items: center; justify-content: center;
+            font-size: 28px; color: white;
+            box-shadow: 0 6px 20px var(--primary-glow);
+            margin-bottom: 10px;
+        }
+
+        .login-header h2 {
+            font-size: 26px; font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-header p {
+            font-size: 14px; color: var(--text-muted); margin-top: 4px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: rgba(150, 120, 255, 0.12);
+            border-radius: var(--radius-pill);
+            padding: 4px; margin-bottom: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .auth-tab {
+            flex: 1; padding: 10px 16px;
+            background: none; border: none;
+            border-radius: var(--radius-pill);
+            font-weight: 700; font-size: 14px;
+            color: var(--text-secondary);
+            cursor: pointer; transition: var(--transition);
+            text-align: center;
+        }
+
+        .auth-tab.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: 0 4px 14px var(--primary-glow);
+        }
+
+        .auth-panel { display: none; }
+        .auth-panel.active { display: block; }
+
+        .input-group { position: relative; }
+
+        .input-group input {
+            padding-right: 44px;
+        }
+
+        .toggle-pw-btn {
+            position: absolute;
+            right: 12px; top: 50%;
+            transform: translateY(-50%);
+            background: none; border: none;
+            cursor: pointer; font-size: 17px;
+            color: var(--text-muted); padding: 4px;
+            line-height: 1;
+        }
+
+        .login-submit-btn {
+            width: 100%; padding: 14px;
+            background: var(--primary-gradient);
+            color: white; border: none;
+            border-radius: var(--radius-pill);
+            font-size: 15px; font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 16px var(--primary-glow);
+            transition: var(--transition);
+            margin-top: 14px;
+        }
+
+        .login-submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px var(--primary-glow);
+        }
+
+        .login-submit-btn:disabled {
+            opacity: 0.7; cursor: not-allowed;
+            transform: none;
+        }
+
+        .msg-banner {
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            font-size: 13px; font-weight: 600;
+            margin-top: 14px; text-align: center;
+            display: none;
+        }
+
+        .msg-banner.error {
+            background: rgba(225, 29, 72, 0.12);
+            color: #e11d48;
+            border: 1px solid rgba(225, 29, 72, 0.25);
+        }
+
+        .msg-banner.success {
+            background: rgba(5, 150, 105, 0.12);
+            color: #059669;
+            border: 1px solid rgba(5, 150, 105, 0.25);
+        }
+
+        .hint-text {
+            font-size: 11px; color: var(--text-muted); margin-top: 3px;
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <div class="login-card">
+        <div class="login-header">
+            <div class="login-logo">🪺</div>
+            <h2>NoteNest</h2>
+            <p id="header-subtitle">Your private personal notebook workspace</p>
+        </div>
+
+        <!-- Tab Buttons -->
+        <div class="auth-tabs">
+            <button type="button" class="auth-tab active" id="tab-login-btn">Sign In</button>
+            <button type="button" class="auth-tab" id="tab-register-btn">Create Account</button>
+        </div>
+
+        <!-- Sign In Panel -->
+        <div class="auth-panel active" id="login-panel">
+            <div class="form-group">
+                <label for="login-username">Username</label>
+                <input type="text" id="login-username" placeholder="Enter your username" autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <div class="input-group">
+                    <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+                    <button type="button" class="toggle-pw-btn" data-target="login-password" title="Show/hide password">👁️</button>
+                </div>
+            </div>
+            <div id="login-msg" class="msg-banner"></div>
+            <button type="button" class="login-submit-btn" id="login-btn">Sign In</button>
+        </div>
+
+        <!-- Register Panel -->
+        <div class="auth-panel" id="register-panel">
+            <div class="form-group">
+                <label for="reg-username">Choose Username</label>
+                <input type="text" id="reg-username" placeholder="e.g. alex, sarah_99" autocomplete="username">
+                <div class="hint-text">3–30 characters · letters, numbers, hyphens, underscores</div>
+            </div>
+            <div class="form-group">
+                <label for="reg-password">Password</label>
+                <div class="input-group">
+                    <input type="password" id="reg-password" placeholder="At least 6 characters" autocomplete="new-password">
+                    <button type="button" class="toggle-pw-btn" data-target="reg-password" title="Show/hide password">👁️</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="reg-confirm">Confirm Password</label>
+                <div class="input-group">
+                    <input type="password" id="reg-confirm" placeholder="Re-enter your password" autocomplete="new-password">
+                    <button type="button" class="toggle-pw-btn" data-target="reg-confirm" title="Show/hide password">👁️</button>
+                </div>
+            </div>
+            <div id="register-msg" class="msg-banner"></div>
+            <button type="button" class="login-submit-btn" id="register-btn">🎉 Create Free Account</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Tab Switching ---
+        const tabLoginBtn = document.getElementById('tab-login-btn');
+        const tabRegBtn   = document.getElementById('tab-register-btn');
+        const loginPanel  = document.getElementById('login-panel');
+        const regPanel    = document.getElementById('register-panel');
+
+        tabLoginBtn.addEventListener('click', () => {
+            tabLoginBtn.classList.add('active');
+            tabRegBtn.classList.remove('active');
+            loginPanel.classList.add('active');
+            regPanel.classList.remove('active');
+            document.getElementById('header-subtitle').textContent = 'Your private personal notebook workspace';
+        });
+
+        tabRegBtn.addEventListener('click', () => {
+            tabRegBtn.classList.add('active');
+            tabLoginBtn.classList.remove('active');
+            regPanel.classList.add('active');
+            loginPanel.classList.remove('active');
+            document.getElementById('header-subtitle').textContent = 'Create your free private notebook';
+        });
+
+        // --- Password Toggle ---
+        document.querySelectorAll('.toggle-pw-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const input = document.getElementById(btn.dataset.target);
+                if (!input) return;
+                input.type = input.type === 'password' ? 'text' : 'password';
+                btn.textContent = input.type === 'password' ? '👁️' : '🙈';
+            });
+        });
+
+        // --- Helper: show message ---
+        function showMsg(id, text, type) {
+            const el = document.getElementById(id);
+            el.textContent = text;
+            el.className = 'msg-banner ' + type;
+            el.style.display = 'block';
+        }
+
+        function hideMsg(id) {
+            const el = document.getElementById(id);
+            el.style.display = 'none';
+            el.textContent = '';
+        }
+
+        // --- Sign In ---
+        document.getElementById('login-btn').addEventListener('click', async () => {
+            hideMsg('login-msg');
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            if (!username || !password) {
+                showMsg('login-msg', 'Please fill in all fields', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('login-btn');
+            btn.disabled = true;
+            btn.textContent = 'Signing in...';
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    showMsg('login-msg', '✅ Signed in! Loading your workspace...', 'success');
+                    setTimeout(() => {
+                        window.location.href = data.role === 'admin' ? '/admin' : '/';
+                    }, 500);
+                } else {
+                    showMsg('login-msg', data.error || 'Invalid username or password.', 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Sign In';
+                }
+            } catch (err) {
+                showMsg('login-msg', 'Connection error. Please try again.', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Sign In';
+            }
+        });
+
+        // Allow Enter key on login fields
+        ['login-username', 'login-password'].forEach(id => {
+            document.getElementById(id).addEventListener('keydown', e => {
+                if (e.key === 'Enter') document.getElementById('login-btn').click();
+            });
+        });
+
+        // --- Register ---
+        document.getElementById('register-btn').addEventListener('click', async () => {
+            hideMsg('register-msg');
+            const username = document.getElementById('reg-username').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const confirm  = document.getElementById('reg-confirm').value;
+
+            if (!username || !password || !confirm) {
+                showMsg('register-msg', 'Please fill in all fields', 'error');
+                return;
+            }
+            if (username.length < 3 || username.length > 30) {
+                showMsg('register-msg', 'Username must be 3–30 characters', 'error');
+                return;
+            }
+            if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+                showMsg('register-msg', 'Username: letters, numbers, hyphens and underscores only', 'error');
+                return;
+            }
+            if (password.length < 6) {
+                showMsg('register-msg', 'Password must be at least 6 characters', 'error');
+                return;
+            }
+            if (password !== confirm) {
+                showMsg('register-msg', 'Passwords do not match', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('register-btn');
+            btn.disabled = true;
+            btn.textContent = 'Creating account...';
+
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    showMsg('register-msg', '🎉 Account created! Opening your notebook...', 'success');
+                    setTimeout(() => { window.location.href = '/'; }, 900);
+                } else {
+                    showMsg('register-msg', data.error || 'Registration failed. Please try a different username.', 'error');
+                    btn.disabled = false;
+                    btn.textContent = '🎉 Create Free Account';
+                }
+            } catch (err) {
+                showMsg('register-msg', 'Connection error. Please try again.', 'error');
+                btn.disabled = false;
+                btn.textContent = '🎉 Create Free Account';
+            }
+        });
+
+        // Allow Enter key on register fields
+        ['reg-username', 'reg-password', 'reg-confirm'].forEach(id => {
+            document.getElementById(id).addEventListener('keydown', e => {
+                if (e.key === 'Enter') document.getElementById('register-btn').click();
+            });
+        });
+    </script>
+</body>
+</html>

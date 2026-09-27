@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteNest - Premium Notebook</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+</head>
+<body class="light-mode">
+    <div id="app-container">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-container" id="logo-btn">
+                    <div class="logo-icon">🪺</div>
+                    <div class="logo-text">
+                        <h2>NoteNest</h2>
+                        <span>Personal Workspace</span>
+                    </div>
+                </div>
+                <button id="mobile-close-btn" class="icon-btn">&times;</button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <h3>Views</h3>
+                    <ul id="view-filters">
+                        <li data-view="dashboard" class="active">
+                            <span class="nav-icon">📊</span>
+                            <span>Dashboard</span>
+                        </li>
+                        <li data-view="all">
+                            <span class="nav-icon">📝</span>
+                            <span>All Notes</span>
+                            <span class="badge" id="badge-all">0</span>
+                        </li>
+                        <li data-view="calendar">
+                            <span class="nav-icon">📅</span>
+                            <span>Calendar</span>
+                        </li>
+                        <li data-view="kanban">
+                            <span class="nav-icon">📋</span>
+                            <span>Kanban Board</span>
+                        </li>
+                        <li data-view="pinned">
+                            <span class="nav-icon">📌</span>
+                            <span>Pinned</span>
+                            <span class="badge" id="badge-pinned">0</span>
+                        </li>
+                        <li data-view="archived">
+                            <span class="nav-icon">📦</span>
+                            <span>Archived</span>
+                            <span class="badge" id="badge-archived">0</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="nav-section">
+                    <h3>Categories</h3>
+                    <ul id="category-filters">
+                        <!-- Categories will be injected dynamically -->
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content" class="main-content">
+            <!-- Header -->
+            <header class="main-header">
+                <button id="mobile-menu-btn" class="icon-btn">☰</button>
+                <div class="search-bar">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" id="search-input" placeholder="Search notes by title, tag, or content...">
+                    <span class="shortcut-badge">Ctrl K</span>
+                    <button id="clear-search-btn" class="hidden">&times;</button>
+                </div>
+                <div class="header-actions">
+                    <button id="command-palette-btn" class="icon-btn" title="Command Palette (Ctrl + K)">⚡</button>
+                    <button id="focus-mode-btn" class="icon-btn" title="Focus Writing Mode">🎯</button>
+                    <button id="theme-toggle-btn" class="icon-btn" title="Toggle Theme">🌙</button>
+                    <a id="admin-panel-link" href="/admin" class="icon-btn hidden" title="Admin Panel" style="text-decoration: none;">⚙️</a>
+                    <button id="new-note-btn" class="primary-btn">
+                        <span>+</span> New Note
+                    </button>
+                    <div class="user-badge" id="user-badge" title="Logged in account">
+                        <span class="user-avatar">👤</span>
+                        <span id="user-display-name">User</span>
+                    </div>
+                    <button id="logout-btn" class="icon-btn" title="Logout" style="color: var(--danger-color); border-color: var(--danger-color);">🚪</button>
+                </div>
+            </header>
+
+            <!-- Views Container -->
+            <div id="view-container">
+                <!-- Dashboard View -->
+                <div id="dashboard-view" class="view active-view">
+                    <div class="dashboard-header">
+                        <h1 id="dashboard-greeting">Welcome back to NoteNest 👋</h1>
+                        <p>Here is your productivity overview and recent notes.</p>
+                    </div>
+
+                    <div class="stats-grid" id="stats-container">
+                        <div class="stat-card">
+                            <div class="stat-icon">📄</div>
+                            <div class="stat-info">
+                                <h4>Total Notes</h4>
+                                <div class="stat-number" id="stat-total-notes">0</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">📌</div>
+                            <div class="stat-info">
+                                <h4>Pinned Notes</h4>
+                                <div class="stat-number" id="stat-pinned-notes">0</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">🏷️</div>
+                            <div class="stat-info">
+                                <h4>Categories</h4>
+                                <div class="stat-number" id="stat-categories">0</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">⏱️</div>
+                            <div class="stat-info">
+                                <h4>Words Written</h4>
+                                <div class="stat-number" id="stat-total-words">0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analytics Section -->
+                    <div class="analytics-row">
+                        <div class="analytics-card">
+                            <h3>📊 Notes by Category</h3>
+                            <div class="chart-bar-container" id="category-analytics">
+                                <!-- Bars injected dynamically -->
+                            </div>
+                        </div>
+                        <div class="analytics-card">
+                            <h3>⚡ Quick Actions</h3>
+                            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                                <button class="secondary-btn" id="dash-quick-new" style="justify-content: flex-start;">✏️ Create New Note</button>
+                                <button class="secondary-btn" id="dash-quick-cal" style="justify-content: flex-start;">📅 Open Calendar View</button>
+                                <button class="secondary-btn" id="dash-quick-kanban" style="justify-content: flex-start;">📋 Open Kanban Board</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-notes-section">
+                        <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 16px;">Recent Notes</h2>
+                        <div class="notes-grid" id="recent-notes-grid">
+                            <!-- Recent notes injected dynamically -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Notes View -->
+                <div id="notes-view" class="view hidden">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+                        <h1 id="current-view-title" style="font-size: 26px; font-weight: 800;">All Notes</h1>
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <label for="sort-select" style="font-size: 13px; font-weight: 700; color: var(--text-muted);">Sort by:</label>
+                            <select id="sort-select" style="padding: 8px 14px; border-radius: var(--radius-pill); border: 1px solid var(--border-color); background: var(--card-bg); color: var(--text-primary); font-weight: 600; outline: none;">
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="updated">Recently Updated</option>
+                                <option value="az">Title (A-Z)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="search-results-info" class="hidden" style="margin-bottom: 16px; padding: 12px 18px; background: var(--primary-light); color: var(--primary-color); border-radius: var(--radius-md); font-weight: 600; font-size: 14px;"></div>
+                    <div class="notes-grid" id="notes-grid">
+                        <!-- Notes injected dynamically -->
+                    </div>
+                    <div id="empty-state" class="hidden" style="text-align: center; padding: 60px 20px; color: var(--text-muted);">
+                        <p style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">No notes found</p>
+                        <p style="font-size: 14px;">Click "+ New Note" to write your first note!</p>
+                    </div>
+                </div>
+
+                <!-- Calendar View -->
+                <div id="calendar-view" class="view hidden">
+                    <div class="calendar-controls">
+                        <button class="icon-btn" id="cal-prev-month">◀</button>
+                        <h2 class="calendar-month-title" id="cal-month-title">August 2026</h2>
+                        <button class="icon-btn" id="cal-next-month">▶</button>
+                    </div>
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- Calendar days injected dynamically -->
+                    </div>
+                </div>
+
+                <!-- Kanban View -->
+                <div id="kanban-view" class="view hidden">
+                    <div style="margin-bottom: 24px;">
+                        <h1 style="font-size: 26px; font-weight: 800;">Kanban Board</h1>
+                        <p style="color: var(--text-secondary); font-size: 14px;">Organize your notes into productivity swimlanes.</p>
+                    </div>
+                    <div class="kanban-board" id="kanban-board">
+                        <div class="kanban-column" data-status="Todo">
+                            <div class="kanban-column-header">
+                                <span class="kanban-column-title">📌 To Do</span>
+                                <span class="badge" id="kanban-count-todo">0</span>
+                            </div>
+                            <div class="kanban-cards" id="kanban-cards-todo"></div>
+                        </div>
+                        <div class="kanban-column" data-status="In Progress">
+                            <div class="kanban-column-header">
+                                <span class="kanban-column-title">⚡ In Progress</span>
+                                <span class="badge" id="kanban-count-progress">0</span>
+                            </div>
+                            <div class="kanban-cards" id="kanban-cards-progress"></div>
+                        </div>
+                        <div class="kanban-column" data-status="Done">
+                            <div class="kanban-column-header">
+                                <span class="kanban-column-title">✅ Done</span>
+                                <span class="badge" id="kanban-count-done">0</span>
+                            </div>
+                            <div class="kanban-cards" id="kanban-cards-done"></div>
+                        </div>
+                        <div class="kanban-column" data-status="Ideas">
+                            <div class="kanban-column-header">
+                                <span class="kanban-column-title">💡 Ideas & Scratch</span>
+                                <span class="badge" id="kanban-count-ideas">0</span>
+                            </div>
+                            <div class="kanban-cards" id="kanban-cards-ideas"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Note Modal (Create & Edit) -->
+    <div id="note-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">New Note</h2>
+                <button id="close-modal-btn" class="icon-btn">&times;</button>
+            </div>
+            <form id="note-form" class="modal-body">
+                <input type="hidden" id="note-id">
+                
+                <div class="form-group">
+                    <label for="note-title">Title *</label>
+                    <input type="text" id="note-title" required placeholder="Give your note a title...">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="note-category">Category *</label>
+                        <select id="note-category" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="note-status">Kanban Status</label>
+                        <select id="note-status">
+                            <option value="Todo">To Do</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Done">Done</option>
+                            <option value="Ideas">Ideas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="note-color">Accent Theme</label>
+                        <select id="note-color">
+                            <option value="default">Default</option>
+                            <option value="accent-emerald">Emerald Green</option>
+                            <option value="accent-purple">Purple Glow</option>
+                            <option value="accent-cyan">Cyan Blue</option>
+                            <option value="accent-amber">Amber Gold</option>
+                            <option value="accent-rose">Rose Pink</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="note-pin-code">PIN Lock (Optional 4 digits)</label>
+                        <input type="password" id="note-pin-code" maxlength="6" placeholder="e.g. 1234">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="note-tags">Tags (comma-separated)</label>
+                    <input type="text" id="note-tags" placeholder="javascript, project, urgent">
+                </div>
+
+                <!-- Editor Tabs & Toolbar -->
+                <div class="editor-tabs">
+                    <span class="editor-tab active" id="tab-write">Write</span>
+                    <span class="editor-tab" id="tab-preview">Live Preview</span>
+                    <span style="margin-left: auto; font-size: 12px; font-weight: 600; color: var(--text-muted);" id="word-count-badge">0 words</span>
+                </div>
+
+                <div class="editor-toolbar" id="editor-toolbar">
+                    <button type="button" class="tool-btn" data-cmd="bold" title="Bold"><b>B</b></button>
+                    <button type="button" class="tool-btn" data-cmd="italic" title="Italic"><i>I</i></button>
+                    <button type="button" class="tool-btn" data-cmd="h2" title="Header">H2</button>
+                    <button type="button" class="tool-btn" data-cmd="code" title="Code Block">&lt;/&gt;</button>
+                    <button type="button" class="tool-btn" data-cmd="ul" title="Bullet List">• List</button>
+                    <button type="button" class="tool-btn" data-cmd="todo" title="Checklist Todo">☑ Todo</button>
+                    <button type="button" class="tool-btn" id="voice-dictate-btn" title="Voice-to-Text Dictation">🎙️ Dictate</button>
+                </div>
+
+                <div class="form-group" id="editor-textarea-wrapper">
+                    <textarea id="note-body" required placeholder="Write your note here... (Markdown formatting supported)" rows="10"></textarea>
+                </div>
+
+                <div class="markdown-preview hidden" id="editor-preview-wrapper">
+                    <!-- Live markdown HTML preview -->
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" id="cancel-note-btn" class="secondary-btn">Cancel</button>
+                    <button type="submit" class="primary-btn">Save Note</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Command Palette Modal -->
+    <div id="command-palette-modal" class="modal hidden">
+        <div class="modal-content command-palette-modal">
+            <div class="command-input-wrapper">
+                <span style="font-size: 18px; color: var(--primary-color);">⚡</span>
+                <input type="text" id="command-palette-input" placeholder="Type a command or search notes..." autofocus>
+            </div>
+            <ul class="command-list" id="command-palette-list">
+                <!-- Commands injected dynamically -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Note PIN Verification Modal -->
+    <div id="pin-verify-modal" class="modal hidden">
+        <div class="modal-content" style="max-width: 380px; text-align: center;">
+            <div class="modal-header">
+                <h2>🔒 Locked Note</h2>
+                <button id="close-pin-modal" class="icon-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">This note is protected with a PIN code.</p>
+                <input type="password" id="pin-input" placeholder="Enter PIN..." style="font-size: 20px; text-align: center; letter-spacing: 4px; padding: 10px;" maxlength="6">
+                <div id="pin-error" style="color: var(--danger-color); font-weight: 700; font-size: 13px; margin-top: 10px; display: none;">Incorrect PIN</div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" id="cancel-pin-btn" class="secondary-btn">Cancel</button>
+                <button type="button" id="submit-pin-btn" class="primary-btn">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div id="delete-modal" class="modal hidden">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div class="modal-header">
+                <h2 style="color: var(--danger-color);">Delete Note?</h2>
+                <button id="close-delete-modal-btn" class="icon-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="font-size: 14px; color: var(--text-secondary); margin-bottom: 8px;">Are you sure you want to delete this note?</p>
+                <p style="font-size: 12px; font-weight: 700; color: var(--danger-color);">This action cannot be undone.</p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" id="cancel-delete-btn" class="secondary-btn">Cancel</button>
+                <button type="button" id="confirm-delete-btn" class="danger-btn">Delete Note</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Focus Writing Mode Overlay -->
+    <div id="focus-mode-overlay" class="hidden">
+        <div class="focus-header">
+            <div style="font-weight: 800; font-size: 18px; color: var(--primary-color);">🎯 NoteNest Focus Mode</div>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <span id="focus-word-count" style="font-size: 14px; font-weight: 600; color: var(--text-muted);">0 words</span>
+                <button class="primary-btn" id="focus-save-btn">Save</button>
+                <button class="secondary-btn" id="focus-exit-btn">Exit Focus (Esc)</button>
+            </div>
+        </div>
+        <div class="focus-body">
+            <input type="text" id="focus-title" class="focus-title-input" placeholder="Title your document...">
+            <textarea id="focus-body" class="focus-content-input" placeholder="Start typing your thoughts freely..."></textarea>
+        </div>
+    </div>
+
+    <!-- Floating Scratchpad Widget -->
+    <div class="scratchpad-widget">
+        <button class="scratchpad-toggle" id="scratchpad-toggle-btn" title="Quick Scratchpad">💡</button>
+        <div class="scratchpad-box hidden" id="scratchpad-box">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                <span style="font-size: 13px; font-weight: 800;">Quick Scratchpad</span>
+                <button id="close-scratchpad" style="background: none; border: none; font-size: 16px; cursor: pointer;">&times;</button>
+            </div>
+            <textarea id="scratchpad-text" placeholder="Jot down quick ideas or scratch notes..."></textarea>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

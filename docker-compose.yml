@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  notenest:
+    build: .
+    container_name: notenest-app
+    ports:
+      - "3000:3000"           # Access at http://localhost:3000
+    volumes:
+      - ./data:/app/data      # Persist notes, users, categories
+    environment:
+      - PORT=3000
+    restart: unless-stopped
